@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Профиль{% endblock %}
+{% block content %}
+<div class="profile">
+    <h1><i class="fas fa-user"></i> Профиль</h1>
+    <div class="profile-card">
+        <div class="profile-avatar"><i class="fas fa-user-circle fa-5x"></i></div>
+        <div class="profile-info">
+            <h2>{{ user.username }}</h2>
+            <p><i class="fas fa-envelope"></i> {{ user.email }}</p>
+            <p><i class="fas fa-calendar-alt"></i> Дата регистрации: {{ user.date_joined|date:"d.m.Y" }}</p>
+            {% if user.author %}
+            <p><i class="fas fa-star"></i> Рейтинг автора: {{ user.author.ratingAuthor }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

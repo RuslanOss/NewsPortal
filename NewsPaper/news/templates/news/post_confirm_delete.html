@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Удаление публикации{% endblock %}
+{% block content %}
+<div class="delete-confirm">
+    <h1><i class="fas fa-exclamation-triangle"></i> Удаление публикации</h1>
+    <p>Вы уверены, что хотите удалить публикацию <strong>"{{ object.title }}"</strong>?</p>
+    <form method="post">{% csrf_token %}
+        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Удалить</button>
+        <a href="{% url 'post_detail' object.pk %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

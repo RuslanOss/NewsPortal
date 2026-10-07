@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}NewsPortal — Главная{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Добро пожаловать в <span class="highlight">NewsPortal</span></h1>
+        <p>Ваш источник свежих новостей и аналитических статей</p>
+        <div class="hero-actions">
+            <a href="{% url 'post_list' %}" class="btn btn-primary"><i class="fas fa-newspaper"></i> Все публикации</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'post_create' %}" class="btn btn-secondary"><i class="fas fa-plus-circle"></i> Написать</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+<section class="section"><h2><i class="fas fa-bolt"></i> Последние новости</h2>
+    <div class="card-grid">
+        {% for post in latest_news %}
+        <div class="card" onclick="location.href='{% url 'post_detail' post.pk %}'">
+            {% if post.image %}<img src="{{ post.image.url }}" alt="{{ post.title }}">{% endif %}
+            <div class="card-body"><span class="badge badge-news">Новость</span>
+                <h3>{{ post.title }}</h3><p>{{ post.preview }}</p>
+                <div class="card-footer"><span><i class="fas fa-calendar-alt"></i> {{ post.dateCreation|date:"d.m.Y" }}</span><span><i class="fas fa-thumbs-up"></i> {{ post.rating }}</span></div>
+            </div>
+        </div>
+        {% empty %}<p class="empty">Пока нет новостей.</p>{% endfor %}
+    </div>
+</section>
+<section class="section"><h2><i class="fas fa-pen-fancy"></i> Свежие статьи</h2>
+    <div class="card-grid">
+        {% for post in latest_articles %}
+        <div class="card" onclick="location.href='{% url 'post_detail' post.pk %}'">
+            <div class="card-body"><span class="badge badge-article">Статья</span>
+                <h3>{{ post.title }}</h3><p>{{ post.preview }}</p>
+                <div class="card-footer"><span><i class="fas fa-calendar-alt"></i> {{ post.dateCreation|date:"d.m.Y" }}</span><span><i class="fas fa-thumbs-up"></i> {{ post.rating }}</span></div>
+            </div>
+        </div>
+        {% empty %}<p class="empty">Пока нет статей.</p>{% endfor %}
+    </div>
+</section>
+<section class="section"><h2><i class="fas fa-fire"></i> Популярное</h2>
+    <div class="card-grid">
+        {% for post in top_rated %}
+        <div class="card" onclick="location.href='{% url 'post_detail' post.pk %}'">
+            <div class="card-body"><h3>{{ post.title }}</h3>
+                <div class="card-footer"><span><i class="fas fa-calendar-alt"></i> {{ post.dateCreation|date:"d.m.Y" }}</span><span><i class="fas fa-thumbs-up"></i> {{ post.rating }}</span></div>
+            </div>
+        </div>
+        {% empty %}<p class="empty">Нет популярных публикаций.</p>{% endfor %}
+    </div>
+</section>
+{% endblock %}

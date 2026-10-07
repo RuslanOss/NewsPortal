@@ -1,18 +1,9 @@
 from django.urls import path
-from django.contrib.auth.views import LoginView, LogoutView
-from .views import BaseRegisterView, ProfileUpdateView
-from .views import upgrade_me
-
-app_name = 'sign'
-
-urlpatterns = [
-    path('login/', LoginView.as_view(template_name='sign/login.html'), name='login'),
-
-    path('logout/', LogoutView.as_view(template_name='sign/logout.html'), name='logout'),
-
-    path('signup/', BaseRegisterView.as_view(template_name='sign/signup.html'), name='signup'),
-
-    path('upgrade/', upgrade_me, name='upgrade'),
-
-    path('profile_update/', ProfileUpdateView.as_view(),name='profile_update'),
+from django.contrib.auth.views import LogoutView
+from .views import signup_view,login_view,profile_view
+urlpatterns=[
+    path('signup/',signup_view,name='signup'),
+    path('login/',login_view,name='login'),
+    path('logout/',LogoutView.as_view(next_page='home'),name='logout'),
+    path('profile/',profile_view,name='profile'),
 ]

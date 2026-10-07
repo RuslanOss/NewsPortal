@@ -1,36 +1,29 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-from django.contrib.auth.models import User, Group
-from django.views.generic.edit import CreateView, UpdateView
-
-from .forms import UpdateProfileForm
-from .models import BaseRegisterForm
-from django.shortcuts import redirect
+from django.shortcuts import render,redirect
+from django.contrib.auth import login,authenticate
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from news.models import Author
 
+def signup_view(request):
+    if request.method=='POST':
+        form=UserCreationForm(request.POST)
+        if form.is_valid():
+            user=form.save()
+            Author.objects.create(authorUser=user)
+            login(request,user)
+            return redirect('home')
+    else: form=UserCreationForm()
+    return render(request,'sign/signup.html',{'form':form})
 
-
-class BaseRegisterView(CreateView):
-    model = User
-    form_class = BaseRegisterForm
-    success_url = '/'
-
+def login_view(request):
+    if request.method=='POST':
+        form=AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user=form.get_user(); login(request,user); return redirect('home')
+    else: form=AuthenticationForm()
+    return render(request,'sign/login.html',{'form':form})
 
 @login_required
-def upgrade_me(request):
-    user = request.user
-    authors_group = Group.objects.get(name='authors')
-    if not request.user.groups.filter(name='authors').exists():
-        authors_group.user_set.add(user)
-    return redirect('/')
-
-
-class ProfileUpdateView(LoginRequiredMixin, UpdateView):
-    model = User
-    template_name = 'profile_update.html'
-    form_class = UpdateProfileForm
-    success_url = '/news/'
-    success_message = 'User profile updated successfully.'
-
-    def get_object(self, **kwargs):
-        return self.request.user
+def profile_view(request):
+    return render(request,'sign/profile.html',{'user':request.user})

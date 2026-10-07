@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{% if form.instance.pk %}Редактировать{% else %}Создать{% endif %} публикацию{% endblock %}
+{% block content %}
+<h1>{% if form.instance.pk %}<i class="fas fa-edit"></i> Редактировать{% else %}<i class="fas fa-plus-circle"></i> Создать{% endif %} публикацию</h1>
+<form method="post" enctype="multipart/form-data" class="post-form">
+    {% csrf_token %}{{ form.as_p }}
+    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Сохранить</button>
+    <a href="{% url 'post_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

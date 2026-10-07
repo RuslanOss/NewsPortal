@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block content %}
+<h1><i class="fas fa-tachometer-alt"></i> Панель управления</h1>
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+{% if author %}
+<div class="dashboard-stats">
+    <div class="stat-card"><i class="fas fa-newspaper fa-2x"></i><h3>{{ posts|length }}</h3><p>Публикаций</p></div>
+    <div class="stat-card"><i class="fas fa-star fa-2x"></i><h3>{{ author.ratingAuthor }}</h3><p>Рейтинг</p></div>
+</div>
+<a href="{% url 'post_create' %}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Новая публикация</a>
+<h2>Мои публикации</h2>
+<div class="card-grid">
+    {% for post in posts %}
+    <div class="card" onclick="location.href='{% url 'post_detail' post.pk %}'">
+        <div class="card-body">
+            <span class="badge {% if post.categoryType == 'NW' %}badge-news{% else %}badge-article{% endif %}">{{ post.get_categoryType_display }}</span>
+            <h3>{{ post.title }}</h3><p>{{ post.preview }}</p>
+            <div class="card-footer"><span><i class="fas fa-calendar-alt"></i> {{ post.dateCreation|date:"d.m.Y" }}</span><span><i class="fas fa-thumbs-up"></i> {{ post.rating }}</span></div>
+        </div>
+    </div>
+    {% empty %}<p class="empty">У вас пока нет публикаций.</p>{% endfor %}
+</div>
+{% endif %}
+{% endblock %}

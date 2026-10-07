@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NewsPortal{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'news/img/favicon.svg' %}">
+    <link rel="stylesheet" href="{% static 'news/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="nav-logo">
+                <i class="fas fa-newspaper"></i> NewsPortal
+            </a>
+            <div class="nav-links">
+                <a href="{% url 'post_list' %}"><i class="fas fa-list"></i> Новости</a>
+                <a href="{% url 'post_search' %}"><i class="fas fa-search"></i> Поиск</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Кабинет</a>
+                    <a href="{% url 'profile' %}"><i class="fas fa-user"></i> {{ user.username }}</a>
+                    <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                {% else %}
+                    <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Войти</a>
+                    <a href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Регистрация</a>
+                {% endif %}
+            </div>
+            <button class="nav-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+    <main class="container">{% block content %}{% endblock %}</main>
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 NewsPortal. Сделано с <i class="fas fa-heart" style="color:var(--accent)"></i></p>
+        </div>
+    </footer>
+    <script src="{% static 'news/js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
